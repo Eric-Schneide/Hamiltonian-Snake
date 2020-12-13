@@ -26,13 +26,13 @@ class Snake:
         return self.x_position, self.y_position
 
     def direction_check(self,direction):
-        if keys[pygame.K_RIGHT] and direction != 'left':
+        if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and direction != 'left':
             return 'right'
-        elif keys[pygame.K_LEFT] and direction != 'right':
+        elif (keys[pygame.K_LEFT] or keys[pygame.K_a]) and direction != 'right':
             return 'left'
-        elif keys[pygame.K_UP] and direction != 'down':
+        elif (keys[pygame.K_UP] or keys[pygame.K_w]) and direction != 'down':
             return 'up'
-        elif keys[pygame.K_DOWN] and direction != 'up':
+        elif (keys[pygame.K_DOWN] or keys[pygame.K_s]) and direction != 'up':
             return 'down'
         else:
             return direction
@@ -42,7 +42,6 @@ pygame.init()
 size = (900, 600)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Hamiltonian Snake")
-keys = pygame.key.get_pressed()
 player = Snake(size)
 direction = None
 run = True
@@ -51,7 +50,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
+    keys = pygame.key.get_pressed()
     direction=player.direction_check(direction)
     player.x_position, player.y_position = player.movement(direction)
     screen.fill((0, 0, 0))
