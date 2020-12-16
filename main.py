@@ -9,6 +9,7 @@ class Snake:
         self.x_position = 0
         self.y_position = 0
         self.velocity = self.edge
+        self.track=[]
 
     def movement(self, direction):
         if direction == 'right' and self.x_position < self.width - self.edge - 1:
@@ -37,6 +38,11 @@ class Snake:
         else:
             return direction
 
+    def tracker(self,length):
+        self.track.insert(0, [self.x_position, self.y_position])
+        self.track.pop() if len(self.track) > length else None
+        return self.track
+
 class Food:
     def __init__(self, size):
         self.width, self.height = size
@@ -56,30 +62,36 @@ def mainframe():
     size = (901, 613)
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Hamiltonian Snake")
+    clock=pygame.time.Clock()
     length = 1
     player = Snake(size)
     apple = Food(size)
     direction = None
+    track = []
     run = True
     while run:
         pygame.time.delay(75)
+        clock.tick(15)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
         keys = pygame.key.get_pressed()
         direction = player.direction_check(direction, keys)
-        player.x_position, player.y_position = player.movement(direction)
+        player.movement(direction)
+        track=player.tracker(length)
         screen.fill((0, 0, 0))
         if player.x_position == apple.x_position and player.y_position == apple.y_position:
             length += 2
             apple.x_position, apple.y_position = apple.get_coordinates(player.x_position, player.y_position)
         pygame.draw.rect(screen, (255, 0, 0), (apple.x_position, apple.y_position, apple.edge, apple.edge))
-        pygame.draw.rect(screen, (0, 255, 0), (player.x_position, player.y_position, player.edge, player.edge))
+        for cube in track:
+            pygame.draw.rect(screen, (0, 255, 0), (cube[0], cube[1], player.edge, player.edge))
         make_grid(size, player.edge, screen)
 
         pygame.display.update()
 
     return length
+
 
 def make_grid(size, edge, screen):
     width, height = size
@@ -87,5 +99,6 @@ def make_grid(size, edge, screen):
         pygame.draw.line(screen, (255, 255, 255), (i * edge, 0), (i * edge, height))
     for i in range(0, (height // edge) + 1):
         pygame.draw.line(screen, (255, 255, 255), (0, i * edge), (width, i * edge))
+
 
 print(mainframe())
