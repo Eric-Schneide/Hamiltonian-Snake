@@ -12,16 +12,16 @@ class Snake:
         self.track=[]
 
     def movement(self, direction):
-        if direction == 'right' and self.x_position < self.width - self.edge - 1:
+        if direction == 'right':
             self.x_position += self.velocity
 
-        elif direction == 'left' and self.x_position > 0:
+        elif direction == 'left':
             self.x_position -= self.velocity
 
-        elif direction == 'up' and self.y_position > 0:
+        elif direction == 'up':
             self.y_position -= self.velocity
 
-        elif direction == 'down' and self.y_position + self.velocity < self.height - self.edge:
+        elif direction == 'down':
             self.y_position += self.velocity
 
         return self.x_position, self.y_position
@@ -42,6 +42,11 @@ class Snake:
         self.track.insert(0, [self.x_position, self.y_position])
         self.track.pop() if len(self.track) > length else None
         return self.track
+
+    def collision_check(self):
+        return True if self.x_position<0 or self.x_position>(self.width-self.edge) or self.y_position<0 \
+                       or self.y_position>(self.height-self.edge) or self.track[0] in self.track[1:] else False
+
 
 class Food:
     def __init__(self, size):
@@ -86,6 +91,7 @@ def mainframe():
         pygame.draw.rect(screen, (255, 0, 0), (apple.x_position, apple.y_position, apple.edge, apple.edge))
         for cube in track:
             pygame.draw.rect(screen, (0, 255, 0), (cube[0], cube[1], player.edge, player.edge))
+        run=False if player.collision_check() else True
         make_grid(size, player.edge, screen)
 
         pygame.display.update()
