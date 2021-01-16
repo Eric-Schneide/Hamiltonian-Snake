@@ -9,9 +9,9 @@ class Snake:
     '''
     def __init__(self, size):
         self.width, self.height = size
-        self.edge = self.width // 50
-        self.x_position = 0
-        self.y_position = 0
+        self.edge = (self.width-100) // 50
+        self.x_position = 50
+        self.y_position = 50
         self.velocity = self.edge
         self.track = []
 
@@ -61,8 +61,9 @@ class Snake:
         '''
         Checks if the head of the snake hits a block of the tail, a banned block from editing, or the barrier
         '''
-        return True if self.x_position < 0 or self.x_position > (self.width - self.edge) or self.y_position < 0 \
-                       or self.y_position > (self.height - self.edge) or self.track[0] in self.track[1:] else False
+        return True if self.x_position < 50 or self.x_position > (self.width - 50 - self.edge) or \
+                       self.y_position < 50 or self.y_position > (self.height - 50 - self.edge) or \
+                       self.track[0] in self.track[1:] else False
 
 
 class Food:
@@ -71,18 +72,29 @@ class Food:
     '''
     def __init__(self, size):
         self.width, self.height = size
-        self.edge = self.width // 50
-        self.x_position, self.y_position = self.edge * 15, self.edge * 15
+        self.edge = (self.width-100) // 50
+        self.x_position, self.y_position = self.edge * random.randint(1, ((self.width-100) // self.edge) - 1)+50, \
+                                           self.edge * random.randint(1, ((self.height-100) // self.edge) - 1)+50
 
     def get_coordinates(self, track, occupied=True):
         '''
         finds coordinates for the apple which are not already occupied by the snake after being eaten
         '''
         while occupied:
-            food_x = self.edge * random.randint(0, (self.width // self.edge) - 1)
-            food_y = self.edge * random.randint(0, (self.height // self.edge) - 1)
+            food_x = self.edge * random.randint(0, ((self.width-100) // self.edge) - 1)+50
+            food_y = self.edge * random.randint(0, ((self.height-100) // self.edge) - 1)+50
             occupied = False if [food_x, food_y] not in track else True
         return food_x, food_y
+
+def make_grid(size, edge, screen):
+    '''
+    draws the grid of the board onto the screen
+    '''
+    width, height = size
+    for i in range(0, ((width-100) // edge) + 1):
+        pygame.draw.line(screen, (255, 255, 255), ((i * edge)+50, 50), ((i * edge)+50, height-50))
+    for i in range(0, ((height-100) // edge) + 1):
+        pygame.draw.line(screen, (255, 255, 255), (50, (i * edge)+50), (width-50, i * edge+50))
 
 
 def mainframe():
@@ -90,7 +102,7 @@ def mainframe():
     The main game-screen which displays the snake game.
     '''
     pygame.init()
-    size = (901, 613) #A bit obscure of a size to be able to show the full grid and an even number of blocks for the height
+    size = (900, 612)
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Hamiltonian Snake")
     clock = pygame.time.Clock()
@@ -125,15 +137,6 @@ def mainframe():
     return length
 
 
-def make_grid(size, edge, screen):
-    '''
-    draws the grid of the board onto the screen
-    '''
-    width, height = size
-    for i in range(0, (width // edge) + 1):
-        pygame.draw.line(screen, (255, 255, 255), (i * edge, 0), (i * edge, height))
-    for i in range(0, (height // edge) + 1):
-        pygame.draw.line(screen, (255, 255, 255), (0, i * edge), (width, i * edge))
 
 
 print(mainframe())
