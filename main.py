@@ -41,14 +41,17 @@ def maingame(size, screen):
         for cube in track:
             pygame.draw.rect(screen, (0, 255, 0), (cube[0], cube[1], player.edge, player.edge))
         if player.collision_check():
-            return length
+            return length,player
         make_grid(size, player.edge, screen)
 
         pygame.display.update()
 
 
-def loss_screen(length):
-    pass
+def loss_screen(length,screen,size,player):
+
+    make_grid(size, player.edge, screen)
+    screen.fill((0, 0, 0), (227, 211, 447, 191))
+    pygame.display.update()
 
 def mainframe():
     '''
@@ -60,6 +63,6 @@ def mainframe():
         screen = pygame.display.set_mode(size)
         pygame.display.set_caption("Hamiltonian Snake")
         start_menu()
-        length=maingame(size,screen)
-        loss_screen(length)
+        length,player=maingame(size,screen)
+        loss_screen(length,screen,size,player)
 print(mainframe())
