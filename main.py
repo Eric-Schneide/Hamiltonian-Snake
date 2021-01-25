@@ -11,22 +11,18 @@ def make_grid(size, edge, screen):
     for i in range(0, ((height-100) // edge) + 1):
         pygame.draw.line(screen, (255, 255, 255), (50, (i * edge)+50), (width-50, i * edge+50))
 
-def mainframe():
-    '''
-    The main game-screen which displays the snake game.
-    '''
-    pygame.init()
-    size = (900, 612)
-    screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Hamiltonian Snake")
+def start_menu():
+    pass
+
+def maingame(size, screen):
     clock = pygame.time.Clock()
     length = 1
+    max_length = 1600
     player = Snake(size)
     apple = Food(size)
     direction = None
     track = []
-    run = True
-    while run:
+    while True:
         pygame.time.delay(75)
         clock.tick(15)
         for event in pygame.event.get():
@@ -39,15 +35,31 @@ def mainframe():
         screen.fill((0, 0, 0))
         if player.x_position == apple.x_position and player.y_position == apple.y_position:
             length += 2
+            sys.exit() if length > max_length else None
             apple.x_position, apple.y_position = apple.get_coordinates(player.track)
         pygame.draw.rect(screen, (255, 0, 0), (apple.x_position, apple.y_position, apple.edge, apple.edge))
         for cube in track:
             pygame.draw.rect(screen, (0, 255, 0), (cube[0], cube[1], player.edge, player.edge))
-        run = False if player.collision_check() else True
+        if player.collision_check():
+            return length
         make_grid(size, player.edge, screen)
 
         pygame.display.update()
 
-    return length
 
+def loss_screen(length):
+    pass
+
+def mainframe():
+    '''
+    The main game-screen which displays the snake game.
+    '''
+    while True:
+        pygame.init()
+        size = (900, 612)
+        screen = pygame.display.set_mode(size)
+        pygame.display.set_caption("Hamiltonian Snake")
+        start_menu()
+        length=maingame(size,screen)
+        loss_screen(length)
 print(mainframe())
