@@ -74,7 +74,7 @@ class Food:
 
     def get_coordinates(self, track, banned_blocks, occupied=True):
         '''
-        finds coordinates for the apple which are not already occupied by the snake after being eaten
+        finds non-banned coordinates for the apple which are not already occupied by the snake after being eaten
         '''
         while occupied:
             food_x = self.edge * random.randint(0, ((self.width-100) // self.edge) - 1)+50

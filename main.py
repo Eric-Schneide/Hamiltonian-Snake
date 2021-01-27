@@ -13,6 +13,9 @@ def make_grid(size, edge, screen,banned_blocks):
     draw_banned_blocks(size,banned_blocks,screen,edge)
 
 def draw_banned_blocks(size,banned_blocks,screen,edge):
+    '''
+    draws lines onto the grid through the banned blocks to mark them
+    '''
     for blocks in banned_blocks:
         pygame.draw.line(screen, (255, 255, 255), (blocks[0], blocks[1]), (blocks[0] + edge, blocks[1] + edge))
 
@@ -20,6 +23,9 @@ def start_menu():
     pass
 
 def maingame(size, screen,banned_blocks):
+    '''
+    The main snake game
+    '''
     clock = pygame.time.Clock()
     length = 1
     max_length = 1600
@@ -60,8 +66,13 @@ def loss_screen(length,screen,size,player):
     pygame.display.update()
 
 def edit(size, edge, screen, banned_blocks=[]):
+    '''
+    Allows the player to edit the boards, marking spaces which can be banned and result in a loss
+    if touched by the snake
+    '''
+
     while True:
-        #screen.fill((0,0,0))
+        screen.fill((0,0,0))
         make_grid(size,edge,screen,banned_blocks)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -73,7 +84,9 @@ def edit(size, edge, screen, banned_blocks=[]):
                         return banned_blocks
                     elif x >= 50 and x <= size[0] - 50 and y>=50 and y<= size[1]-50:
                         cell_x,cell_y=edge*((x-50)//edge)+50,edge*((y-50)//edge)+50
-                        if [cell_x,cell_y] not in banned_blocks:
+                        if [cell_x,cell_y]==[50,50]:
+                            pass
+                        elif [cell_x,cell_y] not in banned_blocks:
                             pygame.draw.line(screen, (255,255,255), (cell_x,cell_y),(cell_x+edge,cell_y+edge))
                             banned_blocks.append([cell_x,cell_y])
                         else:
