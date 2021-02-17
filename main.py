@@ -1,26 +1,7 @@
 from items import Snake, Food, pygame
 from colors import colors
+from drawn_assets import make_grid,make_outline
 import sys
-
-
-def make_grid(size, edge, screen, banned_blocks):
-    '''
-    draws the grid of the board onto the screen
-    '''
-    width, height = size
-    for i in range(0, ((width - 100) // edge) + 1):
-        pygame.draw.line(screen, colors.get('white'), ((i * edge) + 50, 50), ((i * edge) + 50, height - 50))
-    for i in range(0, ((height - 100) // edge) + 1):
-        pygame.draw.line(screen, colors.get('white'), (50, (i * edge) + 50), (width - 50, i * edge + 50))
-    draw_banned_blocks(size, banned_blocks, screen, edge)
-
-
-def draw_banned_blocks(size, banned_blocks, screen, edge):
-    '''
-    draws lines onto the grid through the banned blocks to mark them
-    '''
-    for blocks in banned_blocks:
-        pygame.draw.line(screen, colors.get('white'), (blocks[0], blocks[1]), (blocks[0] + edge, blocks[1] + edge))
 
 
 def start_menu():
@@ -53,10 +34,11 @@ def maingame(size, screen, banned_blocks,length=1,direction=None,track=[]):
             apple.x_position, apple.y_position = apple.get_coordinates(player.track, banned_blocks)
         pygame.draw.rect(screen, colors.get('red'), (apple.x_position, apple.y_position, apple.edge, apple.edge))
         for cube in track:
-            pygame.draw.rect(screen, colors.get('green'), (cube[0], cube[1], player.edge, player.edge))
+            pygame.draw.rect(screen, colors.get('dark_green'), (cube[0], cube[1], player.edge, player.edge))
+            pygame.draw.rect(screen,colors.get('green'),(cube[0]+1,cube[1]+1,player.edge-2,player.edge-2))
         if player.collision_check(banned_blocks):
             return length, player
-        make_grid(size, player.edge, screen, banned_blocks)
+        make_outline(size, player.edge, screen, banned_blocks)
 
         pygame.display.update()
 
