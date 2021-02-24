@@ -1,8 +1,5 @@
-from game import maingame,pygame
-from screens import start_menu,loss_screen
-
-
-
+from game import maingame, pygame
+from screens import start_menu, loss_screen
 
 
 def mainframe(banned_blocks=[]):
@@ -21,4 +18,4 @@ def mainframe(banned_blocks=[]):
         banned_blocks = loss_screen(length, screen, size, base_font, player, banned_blocks)
 
 
-print(mainframe())
+mainframe()
