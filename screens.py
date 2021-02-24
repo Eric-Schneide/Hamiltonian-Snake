@@ -1,20 +1,26 @@
 from items import pygame
 from colors import colors
-from game import make_outline,edit,sys
+from game import make_outline, edit, sys
+
 
 def start_menu():
     pass
 
+
 def loss_screen(length, screen, size, base_font, player, banned_blocks):
+    '''
+    The display which is shown when a loss occurs. Displays the length of the snake and gives the player the
+    option to either play again or edit the board.
+    '''
     while True:
         x, y = pygame.mouse.get_pos()
         loss = base_font.render('Game Over', True, colors.get('white'))
         score = base_font.render(f'Final Length: {length} ', True, colors.get('white'))
         replay = pygame.font.SysFont('arial', 30, False,
-                                     True if x >= 240 and x <= 390 and y >= 320 and y <= 350 else False) \
+                                     True if 240 <= x <= 390 and 320 <= y <= 350 else False) \
             .render('play again', True, colors.get('white'))
         editer = pygame.font.SysFont('arial', 30, False,
-                                     True if x >= 490 and x <= 640 and y >= 320 and y <= 350 else False) \
+                                     True if 490 <= x <= 640 and 320 <= y <= 350 else False) \
             .render('edit board', True, colors.get('white'))
         make_outline(size, player.edge, screen, banned_blocks)
         screen.fill(colors.get('white'), (226, 210, 449, 193))
@@ -28,7 +34,7 @@ def loss_screen(length, screen, size, base_font, player, banned_blocks):
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pressed(num_buttons=3)[0] and x >= 240 and x <= 390 and y >= 320 and y <= 350:
+                if pygame.mouse.get_pressed(num_buttons=3)[0] and 240 <= x <= 390 and 320 <= y <= 350:
                     return banned_blocks
-                elif pygame.mouse.get_pressed(num_buttons=3)[0] and x >= 490 and x <= 640 and y >= 320 and y <= 350:
+                elif pygame.mouse.get_pressed(num_buttons=3)[0] and 490 <= x <= 640 and 320 <= y <= 350:
                     return edit(size, player.edge, screen, banned_blocks)
