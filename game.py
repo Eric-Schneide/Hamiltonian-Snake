@@ -28,13 +28,17 @@ def maingame(size, screen, base_font, banned_blocks, length=1, direction=None, t
             length += 2
             sys.exit() if length >= max_length else None
             apple.x_position, apple.y_position = apple.get_coordinates(player.track, banned_blocks)
-        pygame.draw.rect(screen, colors.get('red'), (apple.x_position, apple.y_position, apple.edge, apple.edge))
+        pygame.draw.rect(screen, colors.get('red'), [apple.x_position, apple.y_position, apple.edge, apple.edge])
         for cube in track:
-            pygame.draw.rect(screen, colors.get('dark_green'), (cube[0], cube[1], player.edge, player.edge))
-            pygame.draw.rect(screen, colors.get('green'), (cube[0] + 1, cube[1] + 1, player.edge - 2, player.edge - 2))
+            pygame.draw.rect(screen, colors.get('dark_green'), [cube[0], cube[1], player.edge, player.edge])
+            pygame.draw.rect(screen, colors.get('green'), [cube[0] + 1, cube[1] + 1, player.edge - 2, player.edge - 2])
         if player.collision_check(banned_blocks):
+            pygame.draw.rect(screen, colors.get('white'),
+                             [track[0][0] + 1, track[0][1] + 1, player.edge - 2, player.edge - 2])
             return length, player
         make_outline(size, player.edge, screen, banned_blocks)
+        score = base_font.render(f'Length: {length}', True, colors.get('white'))
+        screen.blit(score, (50, 10))
 
         pygame.display.update()
 
