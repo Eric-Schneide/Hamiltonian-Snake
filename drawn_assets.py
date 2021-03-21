@@ -2,7 +2,7 @@ from colors import colors
 from items import pygame
 
 
-def make_outline(size, edge, screen, banned_blocks):
+def make_outline(size, screen):
     '''
     draws an outline of the board onto the screen for playing
     '''
@@ -11,7 +11,7 @@ def make_outline(size, edge, screen, banned_blocks):
     pygame.draw.line(screen, colors.get('white'), (width - 50, 50), (width - 50, height - 50))
     pygame.draw.line(screen, colors.get('white'), (50, 50), (width - 50, 50))
     pygame.draw.line(screen, colors.get('white'), (50, height - 50), (width - 50, height - 50))
-    draw_banned_blocks(banned_blocks, screen, edge)
+
 
 
 def make_grid(size, edge, screen, banned_blocks):
@@ -31,4 +31,5 @@ def draw_banned_blocks(banned_blocks, screen, edge):
     draws lines onto the grid through the banned blocks to mark them
     '''
     for blocks in banned_blocks:
-        pygame.draw.rect(screen, colors.get('purple'), (blocks[0], blocks[1], edge, edge))
+        pygame.draw.rect(screen, colors.get('dark_purple'), (blocks[0], blocks[1], edge, edge))
+        pygame.draw.rect(screen,colors.get('purple'),(blocks[0]+1,blocks[1]+1,edge-2,edge-2))
