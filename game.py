@@ -1,6 +1,6 @@
 from items import Snake, Food, pygame
 from colors import colors
-from drawn_assets import make_grid, make_outline,draw_banned_blocks
+from drawn_assets import make_grid, make_outline,draw_banned_blocks,draw_arrow
 import sys
 
 
@@ -53,9 +53,7 @@ def edit(size, edge, screen, banned_blocks=[]):
 
     while True:
         screen.fill(colors.get('black'))
-        pygame.draw.line(screen, colors.get('white'), (10, 25), (45, 25))
-        pygame.draw.line(screen, colors.get('white'), (10, 25), (10 + 20 * (3 ** (1 / 2) / 2), (25 - 20 / 2)))
-        pygame.draw.line(screen, colors.get('white'), (10, 25), (10 + 20 * (3 ** (1 / 2) / 2), (25 + 20 / 2)))
+        draw_arrow(screen)
         make_grid(size, edge, screen, banned_blocks)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
