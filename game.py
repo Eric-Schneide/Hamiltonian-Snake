@@ -1,16 +1,15 @@
-from items import Snake, Food, pygame
+from items import Food, pygame
 from colors import colors
 from drawn_assets import make_grid, make_outline,draw_banned_blocks,draw_arrow
 import sys
 
 
-def maingame(size, screen, base_font, banned_blocks, length=1, direction=None, track=[]):
+def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1, direction=None, track=[]):
     '''
     The main snake game
     '''
     clock = pygame.time.Clock()
     max_length = 1600 - len(banned_blocks)
-    player = Snake(size)
     apple = Food(size, track, banned_blocks)
 
 
@@ -27,7 +26,6 @@ def maingame(size, screen, base_font, banned_blocks, length=1, direction=None, t
         screen.fill(colors.get('black'))
         if player.x_position == apple.x_position and player.y_position == apple.y_position:
             length += 4
-            sys.exit() if length >= max_length else None
             apple.x_position, apple.y_position = apple.get_coordinates(player.track, banned_blocks)
         pygame.draw.rect(screen, colors.get('dark_red'), [apple.x_position, apple.y_position, apple.edge, apple.edge])
         pygame.draw.rect(screen, colors.get('red'),
@@ -36,7 +34,7 @@ def maingame(size, screen, base_font, banned_blocks, length=1, direction=None, t
             pygame.draw.rect(screen, colors.get('dark_green'), [cube[0], cube[1], player.edge, player.edge])
             pygame.draw.rect(screen, colors.get('green'), [cube[0] + 1, cube[1] + 1, player.edge - 2, player.edge - 2])
         if player.collision_check(banned_blocks):
-            return length, player
+            return length
         make_outline(size, screen)
         draw_banned_blocks(banned_blocks, screen, player.edge)
         score = base_font.render(f'Length: {length}', True, colors.get('white'))
@@ -45,7 +43,7 @@ def maingame(size, screen, base_font, banned_blocks, length=1, direction=None, t
         pygame.display.update()
 
 
-def edit(size, edge, screen, banned_blocks=[]):
+def edit(size, edge, screen, banned_blocks):
     '''
     Allows the player to edit the boards, marking spaces which can be banned and result in a loss
     if touched by the snake
