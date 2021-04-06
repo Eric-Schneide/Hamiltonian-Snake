@@ -1,6 +1,6 @@
-from items import pygame
 from colors import colors
-from game import make_outline,draw_banned_blocks, draw_arrow, edit, sys
+from game import edit, make_outline, draw_banned_blocks, draw_arrow, sys
+from items import pygame
 
 
 def start_menu():
@@ -10,7 +10,7 @@ def start_menu():
     pass
 
 
-def settings(size, screen, base_font):
+def settings(size, screen, base_font, player, gamemode, banned_blocks):
     '''
     The page where the player will be able to customize their game with certain game modes which can be turned or off
     at will in between rounds of play.
@@ -23,7 +23,7 @@ def settings(size, screen, base_font):
             .render("Play Normal Game", True, colors.get('white'))
         hamilton = pygame.font.SysFont('arial', 30, False, True if 475 <= x <= 835 and 520 <= y <= 550 else False) \
             .render("Play Hamiltonian Pathway", True, colors.get('white'))
-        edit = pygame.font.SysFont('arial', 30, False, True if 65 <= x <= 135 and 200 <= y <= 230 else False) \
+        edit_marker = pygame.font.SysFont('arial', 30, False, True if 65 <= x <= 135 and 200 <= y <= 230 else False) \
             .render("Edit", True, colors.get('white'))
         poison = pygame.font.SysFont('arial', 30, False, True if 65 <= x <= 255 and 250 <= y <= 280 else False) \
             .render("Poison Apple", True, colors.get('white'))
@@ -37,7 +37,7 @@ def settings(size, screen, base_font):
         make_outline(size, screen)
         screen.blit(title, (250, 70))
         screen.blit(list, (75, 150))
-        screen.blit(edit, (75, 200))
+        screen.blit(edit_marker, (75, 200))
         screen.blit(poison, (75, 250))
         screen.blit(multi, (75, 300))
         screen.blit(dualist, (75, 350))
@@ -49,8 +49,21 @@ def settings(size, screen, base_font):
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
-                    return
+                if pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 135 and 200 <= y <= 230:
+                    banned_blocks = edit(size, player.edge, screen, banned_blocks)
+                elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 255 and 250 <= y <= 280:
+                    gamemode[0] = 1 if gamemode[0] == 0 else 0
+                elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 210 and 300 <= y <= 330:
+                    if gamemode[1] == 0:
+                        gamemode[1] = 1
+                    elif gamemode[1] == 1:
+                        gamemode[1] = 2
+                    elif gamemode[1] == 2:
+                        gamemode[1] = 0
+                elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 175 and 350 <= y <= 380:
+                    gamemode[2] = 1 if gamemode[2] == 0 else 0
+                elif pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
+                    return True, banned_blocks, gamemode
 
 
 def loss_screen(length, screen, size, base_font, player, banned_blocks):
@@ -82,6 +95,6 @@ def loss_screen(length, screen, size, base_font, player, banned_blocks):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed(num_buttons=3)[0] and 240 <= x <= 390 and 320 <= y <= 350:
-                    return banned_blocks
+                    return True
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 490 <= x <= 640 and 320 <= y <= 350:
-                    return edit(size, player.edge, screen, banned_blocks)
+                    return False
