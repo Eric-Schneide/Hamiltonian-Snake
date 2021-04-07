@@ -17,7 +17,7 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
     '''
     while True:
         x, y = pygame.mouse.get_pos()
-        title = base_font.render("Configure Your Game Mode", True, colors.get('white'))
+        title = base_font.render("Configure Your Game ", True, colors.get('white'))
         list = base_font.render("Settings:", True, colors.get('white'))
         start = pygame.font.SysFont('arial', 30, False, True if 580 <= x <= 835 and 470 <= y <= 500 else False) \
             .render("Play Normal Game", True, colors.get('white'))
@@ -44,7 +44,6 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
         screen.blit(hamilton, (480, 520))
         screen.blit(start, (580, 470))
 
-        pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -54,16 +53,30 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 255 and 250 <= y <= 280:
                     gamemode[0] = 1 if gamemode[0] == 0 else 0
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 210 and 300 <= y <= 330:
-                    if gamemode[1] == 0:
-                        gamemode[1] = 1
-                    elif gamemode[1] == 1:
-                        gamemode[1] = 2
-                    elif gamemode[1] == 2:
-                        gamemode[1] = 0
+                    gamemode[1] = (gamemode[1] + 1) % 4
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 175 and 350 <= y <= 380:
                     gamemode[2] = 1 if gamemode[2] == 0 else 0
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
                     return True, banned_blocks, gamemode
+
+        if gamemode[0]:
+            pygame.draw.rect(screen, colors.get('dark_blue'), [265, 260, 20, 20])
+            pygame.draw.rect(screen, colors.get('blue'), [266, 261, 18, 18])
+
+        x_apple = 220
+        for apples in range(0, 2 * gamemode[1] + 1):
+            pygame.draw.rect(screen, colors.get('dark_red'), [x_apple, 310, 20, 20])
+            pygame.draw.rect(screen, colors.get('red'), [x_apple + 1, 311, 18, 18])
+            x_apple += 25
+
+        if gamemode[2]:
+            x_cube = 185
+            for cubes in range(0, 5):
+                pygame.draw.rect(screen, colors.get('dark_orange'), [x_cube, 360, 20, 20])
+                pygame.draw.rect(screen, colors.get('orange'), [x_cube + 1, 361, 18, 18])
+                x_cube += 20
+
+        pygame.display.update()
 
 
 def loss_screen(length, screen, size, base_font, player, banned_blocks):
