@@ -71,10 +71,11 @@ class Food:
     The apple which will increase the score and the length of the snake
     '''
 
-    def __init__(self, size, track, banned_blocks):
+    def __init__(self, size, track, banned_blocks,apples):
         self.width, self.height = size
         self.edge = (self.width - 100) // 50
-        self.x_position, self.y_position = self.get_coordinates(track, banned_blocks)
+        self.apples = apples
+        self.apple_pos = []
 
     def get_coordinates(self, track, banned_blocks, occupied=True):
         '''
@@ -83,5 +84,6 @@ class Food:
         while occupied:
             food_x = self.edge * random.randint(0, ((self.width - 100) // self.edge) - 1) + 50
             food_y = self.edge * random.randint(0, ((self.height - 100) // self.edge) - 1) + 50
-            occupied = [food_x, food_y] in track or [food_x, food_y] in banned_blocks
-        return food_x, food_y
+            occupied = [food_x, food_y] in track or [food_x, food_y] in banned_blocks \
+                       or [food_x,food_y] in self.apple_pos
+        return [food_x, food_y]

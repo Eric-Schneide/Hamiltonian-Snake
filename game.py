@@ -10,8 +10,9 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
     '''
     clock = pygame.time.Clock()
     max_length = 1600 - len(banned_blocks)
-    apple = Food(size, track, banned_blocks)
-
+    apple = Food(size, track, banned_blocks,(2*gamemode[1])+1)
+    for apples in range(0,apple.apples):
+        apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
 
     while True:
         pygame.time.delay(75)
@@ -24,15 +25,17 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
         player.movement(direction)
         track = player.tracker(length)
         screen.fill(colors.get('black'))
-        if player.x_position == apple.x_position and player.y_position == apple.y_position:
+        if [player.x_position,player.y_position] in apple.apple_pos:
             length += 4
-            apple.x_position, apple.y_position = apple.get_coordinates(player.track, banned_blocks)
-        pygame.draw.rect(screen, colors.get('dark_red'), [apple.x_position, apple.y_position, apple.edge, apple.edge])
-        pygame.draw.rect(screen, colors.get('red'),
-                         [apple.x_position + 1, apple.y_position + 1, apple.edge - 2, apple.edge - 2])
-        for cube in track:
-            pygame.draw.rect(screen, colors.get('dark_green'), [cube[0], cube[1], player.edge, player.edge])
-            pygame.draw.rect(screen, colors.get('green'), [cube[0] + 1, cube[1] + 1, player.edge - 2, player.edge - 2])
+            apple.apple_pos.pop(apple.apple_pos.index([player.x_position,player.y_position]))
+            apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
+        for apples in apple.apple_pos:
+            pygame.draw.rect(screen, colors.get('dark_red'), [apples[0], apples[1], apple.edge, apple.edge])
+            pygame.draw.rect(screen, colors.get('red'),
+                         [apples[0] + 1, apples[1] + 1, apple.edge - 2, apple.edge - 2])
+        for cubes in track:
+            pygame.draw.rect(screen, colors.get('dark_green'), [cubes[0], cubes[1], player.edge, player.edge])
+            pygame.draw.rect(screen, colors.get('green'), [cubes[0] + 1, cubes[1] + 1, player.edge - 2, player.edge - 2])
         if player.collision_check(banned_blocks):
             return length
         make_outline(size, screen)

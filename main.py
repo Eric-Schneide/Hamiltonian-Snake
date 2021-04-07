@@ -17,7 +17,7 @@ def mainframe(banned_blocks=[],gamemode=[0,0,0], menu_skip=False, settings_skip=
         player = Snake(size)
         start_menu() if not menu_skip else None
         if not settings_skip:
-            menu_skip, banned_blocks, gamemode = settings(size, screen, base_font, player,gamemode, banned_blocks)
+            menu_skip, banned_blocks, gamemode = settings(size, screen, base_font, player, gamemode, banned_blocks)
         length = maingame(size, screen, base_font, player, banned_blocks, gamemode)
         settings_skip = loss_screen(length, screen, size, base_font, player, banned_blocks)
 
