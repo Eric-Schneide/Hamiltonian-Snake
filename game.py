@@ -1,4 +1,4 @@
-from items import Food, pygame
+from items import Food, Dualist, pygame
 from colors import colors
 from drawn_assets import make_grid, make_outline,draw_banned_blocks,draw_arrow
 import sys
@@ -11,6 +11,7 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
     clock = pygame.time.Clock()
     max_length = 1600 - len(banned_blocks)
     apple = Food(size, track, banned_blocks,(2*gamemode[1])+1)
+    dualist = Dualist(size) if gamemode[2] else None
     for apples in range(0,apple.apples):
         apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
 
@@ -23,7 +24,8 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
         keys = pygame.key.get_pressed()
         direction = player.direction_check(direction, keys)
         player.movement(direction)
-        track = player.tracker(length)
+        player.tracker(length)
+
         screen.fill(colors.get('black'))
         if [player.x_position,player.y_position] in apple.apple_pos:
             length += 4
@@ -33,10 +35,17 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
             pygame.draw.rect(screen, colors.get('dark_red'), [apples[0], apples[1], apple.edge, apple.edge])
             pygame.draw.rect(screen, colors.get('red'),
                          [apples[0] + 1, apples[1] + 1, apple.edge - 2, apple.edge - 2])
-        for cubes in track:
+        for cubes in player.track:
             pygame.draw.rect(screen, colors.get('dark_green'), [cubes[0], cubes[1], player.edge, player.edge])
             pygame.draw.rect(screen, colors.get('green'), [cubes[0] + 1, cubes[1] + 1, player.edge - 2, player.edge - 2])
-        if player.collision_check(banned_blocks):
+        if gamemode[2]:
+            dualist.movement(direction)
+            dualist.tracker(length)
+            for cubes in dualist.track:
+                pygame.draw.rect(screen, colors.get('dark_orange'), [cubes[0], cubes[1], player.edge, player.edge])
+                pygame.draw.rect(screen, colors.get('orange'),
+                                 [cubes[0] + 1, cubes[1] + 1, player.edge - 2, player.edge - 2])
+        if player.collision_check(banned_blocks,dualist.track):
             return length
         make_outline(size, screen)
         draw_banned_blocks(banned_blocks, screen, player.edge)
