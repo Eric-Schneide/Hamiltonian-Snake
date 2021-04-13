@@ -3,7 +3,7 @@ from screens import start_menu, settings, loss_screen
 from items import Snake
 
 
-def mainframe(banned_blocks=[],gamemode=[0,0,0], menu_skip=False, settings_skip=False):
+def mainframe(banned_blocks=[], gamemode=[0, 0, 0], menu_skip=False, settings_skip=False):
     '''
     The main game-screen which displays the snake game.
     '''

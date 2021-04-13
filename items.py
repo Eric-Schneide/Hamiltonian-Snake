@@ -72,13 +72,14 @@ class Dualist(Snake):
     Will mirror the snake's moves and act as a moving obstacle.
     '''
 
-    def __init__(self,size):
+    def __init__(self,size,length):
         self.width, self.height = size
         self.edge = (self.width - 100) // 50
         self.x_position = (self.edge * 49) + 50
         self.y_position = (self.edge * 31) + 50
         self.velocity = self.edge
         self.track = []
+        self.length = length
 
 
     def movement(self,direction):

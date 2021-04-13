@@ -1,6 +1,6 @@
 from items import Food, Dualist, pygame
 from colors import colors
-from drawn_assets import make_grid, make_outline,draw_banned_blocks,draw_arrow
+from drawn_assets import make_grid, make_outline, draw_banned_blocks, draw_arrow
 import sys
 
 
@@ -10,9 +10,9 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
     '''
     clock = pygame.time.Clock()
     max_length = 1600 - len(banned_blocks)
-    apple = Food(size, track, banned_blocks,(2*gamemode[1])+1)
-    dualist = Dualist(size) if gamemode[2] else None
-    for apples in range(0,apple.apples):
+    apple = Food(size, track, banned_blocks, (2 * gamemode[1]) + 1)
+    dualist = Dualist(size,1 if gamemode[2] else 0)
+    for apples in range(0, apple.apples):
         apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
 
     while True:
@@ -25,28 +25,31 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
         direction = player.direction_check(direction, keys)
         player.movement(direction)
         player.tracker(length)
-
         screen.fill(colors.get('black'))
-        if [player.x_position,player.y_position] in apple.apple_pos:
+        if [player.x_position, player.y_position] in apple.apple_pos:
             length += 4
-            apple.apple_pos.pop(apple.apple_pos.index([player.x_position,player.y_position]))
+            dualist.length+=4 if gamemode[2] else 0
+            apple.apple_pos.pop(apple.apple_pos.index([player.x_position, player.y_position]))
             apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
-        for apples in apple.apple_pos:
-            pygame.draw.rect(screen, colors.get('dark_red'), [apples[0], apples[1], apple.edge, apple.edge])
-            pygame.draw.rect(screen, colors.get('red'),
-                         [apples[0] + 1, apples[1] + 1, apple.edge - 2, apple.edge - 2])
+
         for cubes in player.track:
             pygame.draw.rect(screen, colors.get('dark_green'), [cubes[0], cubes[1], player.edge, player.edge])
-            pygame.draw.rect(screen, colors.get('green'), [cubes[0] + 1, cubes[1] + 1, player.edge - 2, player.edge - 2])
+            pygame.draw.rect(screen, colors.get('green'),
+                             [cubes[0] + 1, cubes[1] + 1, player.edge - 2, player.edge - 2])
         if gamemode[2]:
             dualist.movement(direction)
-            dualist.tracker(length)
+            dualist.tracker(dualist.length)
             for cubes in dualist.track:
                 pygame.draw.rect(screen, colors.get('dark_orange'), [cubes[0], cubes[1], player.edge, player.edge])
                 pygame.draw.rect(screen, colors.get('orange'),
                                  [cubes[0] + 1, cubes[1] + 1, player.edge - 2, player.edge - 2])
-        if player.collision_check(banned_blocks,dualist.track):
+        for apples in apple.apple_pos:
+            pygame.draw.rect(screen, colors.get('dark_red'), [apples[0], apples[1], apple.edge, apple.edge])
+            pygame.draw.rect(screen, colors.get('red'), [apples[0] + 1, apples[1] + 1, apple.edge - 2, apple.edge - 2])
+
+        if player.collision_check(banned_blocks, dualist.track):
             return length
+
         make_outline(size, screen)
         draw_banned_blocks(banned_blocks, screen, player.edge)
         score = base_font.render(f'Length: {length}', True, colors.get('white'))

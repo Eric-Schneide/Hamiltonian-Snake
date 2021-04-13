@@ -18,7 +18,7 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
     while True:
         x, y = pygame.mouse.get_pos()
         title = base_font.render("Configure Your Game ", True, colors.get('white'))
-        list = base_font.render("Settings:", True, colors.get('white'))
+        game_mode_list = base_font.render("Settings:", True, colors.get('white'))
         start = pygame.font.SysFont('arial', 30, False, True if 580 <= x <= 835 and 470 <= y <= 500 else False) \
             .render("Play Normal Game", True, colors.get('white'))
         hamilton = pygame.font.SysFont('arial', 30, False, True if 475 <= x <= 835 and 520 <= y <= 550 else False) \
@@ -36,7 +36,7 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
         draw_arrow(screen)
         make_outline(size, screen)
         screen.blit(title, (250, 70))
-        screen.blit(list, (75, 150))
+        screen.blit(game_mode_list, (75, 150))
         screen.blit(edit_marker, (75, 200))
         screen.blit(poison, (75, 250))
         screen.blit(multi, (75, 300))
