@@ -51,7 +51,7 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 if pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 135 and 200 <= y <= 230:
                     banned_blocks = edit(size, player.edge, screen, banned_blocks)
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 255 and 250 <= y <= 280:
-                    gamemode[0] = 1 if gamemode[0] == 0 else 0
+                    gamemode[0] = (gamemode[0]+1)%4
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 210 and 300 <= y <= 330:
                     gamemode[1] = (gamemode[1] + 1) % 5
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 175 and 350 <= y <= 380:
@@ -59,9 +59,11 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
                     return True, banned_blocks, gamemode
 
-        if gamemode[0]:
-            pygame.draw.rect(screen, colors.get('dark_blue'), [265, 260, 20, 20])
-            pygame.draw.rect(screen, colors.get('blue'), [266, 261, 18, 18])
+        x_poison=265
+        for poison_apples in range(0,gamemode[0]):
+            pygame.draw.rect(screen, colors.get('dark_blue'), [x_poison, 260, 20, 20])
+            pygame.draw.rect(screen, colors.get('blue'), [x_poison+1, 261, 18, 18])
+            x_poison+=25
 
         x_apple = 220
         for apples in range(0, (2*gamemode[1]) + 1):

@@ -57,7 +57,7 @@ class Snake:
         self.track.pop() if len(self.track) > length else None
         return self.track
 
-    def collision_check(self, banned_blocks,dualist_path):
+    def collision_check(self, banned_blocks, dualist_path):
         '''
         Checks if the head of the snake hits a block of the tail, a banned block from editing, or the barrier
         '''
@@ -72,7 +72,7 @@ class Dualist(Snake):
     Will mirror the snake's moves and act as a moving obstacle.
     '''
 
-    def __init__(self,size,length):
+    def __init__(self, size, length):
         self.width, self.height = size
         self.edge = (self.width - 100) // 50
         self.x_position = (self.edge * 49) + 50
@@ -81,8 +81,10 @@ class Dualist(Snake):
         self.track = []
         self.length = length
 
-
-    def movement(self,direction):
+    def movement(self, direction):
+        '''
+        moves in the opposite direction of the player snake
+        '''
         if direction == 'right':
             self.x_position -= self.velocity
 
@@ -103,7 +105,7 @@ class Food:
     The apple which will increase the score and the length of the snake
     '''
 
-    def __init__(self, size, track, banned_blocks, apples):
+    def __init__(self, size, apples):
         self.width, self.height = size
         self.edge = (self.width - 100) // 50
         self.apples = apples
@@ -119,3 +121,20 @@ class Food:
             occupied = [food_x, food_y] in track or [food_x, food_y] in banned_blocks \
                        or [food_x, food_y] in self.apple_pos
         return [food_x, food_y]
+
+
+class P_Food(Food):
+    '''
+    the poisoned food which will move around the board. this encompasses the poisoned apple game mode.
+    '''
+
+    def __init__(self, size, apples):
+        self.width, self.height = size
+        self.edge = (self.width - 100) // 50
+        self.apples = apples
+        self.apple_info = []
+
+    def movement(self):
+        '''
+        the set movement of the poisoned apple
+        '''

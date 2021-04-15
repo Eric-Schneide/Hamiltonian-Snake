@@ -1,4 +1,4 @@
-from items import Food, Dualist, pygame
+from items import Food, Dualist, P_Food, pygame
 from colors import colors
 from drawn_assets import make_grid, make_outline, draw_banned_blocks, draw_arrow
 import sys
@@ -11,7 +11,10 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
     clock = pygame.time.Clock()
     max_length = 1600 - len(banned_blocks)
     apple = Food(size, track, banned_blocks, (2 * gamemode[1]) + 1)
-    dualist = Dualist(size,1 if gamemode[2] else 0)
+    dualist = Dualist(size, 1 if gamemode[2] else 0)
+    poison_apple = P_Food(size, gamemode[0])
+    for apples in range(0, poison_apple.apples):
+        poison_apple.apple_pos.append(poison_apple.get_coordinates(player.track, banned_blocks))
     for apples in range(0, apple.apples):
         apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
 
@@ -28,7 +31,7 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
         screen.fill(colors.get('black'))
         if [player.x_position, player.y_position] in apple.apple_pos:
             length += 4
-            dualist.length+=4 if gamemode[2] else 0
+            dualist.length += 4
             apple.apple_pos.pop(apple.apple_pos.index([player.x_position, player.y_position]))
             apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
 
