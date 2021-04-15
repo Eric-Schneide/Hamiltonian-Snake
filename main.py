@@ -15,7 +15,6 @@ def mainframe(banned_blocks=[], gamemode=[0, 0, 0], menu_skip=False, settings_sk
         pygame.display.set_caption("Hamiltonian Snake")
         base_font = pygame.font.SysFont('', 48)
         player = Snake(size)
-        print((player.height-100)/player.edge)
         start_menu() if not menu_skip else None
         if not settings_skip:
             menu_skip, banned_blocks, gamemode = settings(size, screen, base_font, player, gamemode, banned_blocks)
