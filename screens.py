@@ -51,7 +51,7 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 if pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 135 and 200 <= y <= 230:
                     banned_blocks = edit(size, player.edge, screen, banned_blocks)
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 255 and 250 <= y <= 280:
-                    gamemode[0] = (gamemode[0]+1)%4
+                    gamemode[0] = (gamemode[0] + 1) % 4
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 210 and 300 <= y <= 330:
                     gamemode[1] = (gamemode[1] + 1) % 5
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 175 and 350 <= y <= 380:
@@ -59,14 +59,14 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
                     return True, banned_blocks, gamemode
 
-        x_poison=265
-        for poison_apples in range(0,gamemode[0]):
+        x_poison = 265
+        for poison_apples in range(0, gamemode[0]):
             pygame.draw.rect(screen, colors.get('dark_blue'), [x_poison, 260, 20, 20])
-            pygame.draw.rect(screen, colors.get('blue'), [x_poison+1, 261, 18, 18])
-            x_poison+=25
+            pygame.draw.rect(screen, colors.get('blue'), [x_poison + 1, 261, 18, 18])
+            x_poison += 25
 
         x_apple = 220
-        for apples in range(0, (2*gamemode[1]) + 1):
+        for apples in range(0, (2 * gamemode[1]) + 1):
             pygame.draw.rect(screen, colors.get('dark_red'), [x_apple, 310, 20, 20])
             pygame.draw.rect(screen, colors.get('red'), [x_apple + 1, 311, 18, 18])
             x_apple += 25
@@ -97,7 +97,7 @@ def loss_screen(length, screen, size, base_font, player, banned_blocks):
         make_outline(size, screen)
         draw_banned_blocks(banned_blocks, screen, player.edge)
         pygame.draw.rect(screen, colors.get('white'),
-                         [player.track[0][0]+1, player.track[0][1]+1, player.edge-2, player.edge-2])
+                         [player.track[0][0] + 1, player.track[0][1] + 1, player.edge - 2, player.edge - 2])
         screen.fill(colors.get('white'), (226, 210, 449, 193))
         screen.fill(colors.get('black'), (227, 211, 447, 191))
         screen.blit(loss, (360, 225))
