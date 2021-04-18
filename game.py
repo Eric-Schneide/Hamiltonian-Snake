@@ -9,14 +9,13 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
     The main snake game
     '''
     clock = pygame.time.Clock()
-    max_length = 1600 - len(banned_blocks)
-    apple = Food(size, track, banned_blocks, (2 * gamemode[1]) + 1)
+    apple = Food(size, (2 * gamemode[1]) + 1)
     dualist = Dualist(size, 1 if gamemode[2] else 0)
     poison_apple = P_Food(size, gamemode[0])
-    for apples in range(0, poison_apple.apples):
-        poison_apple.apple_pos.append(poison_apple.get_coordinates(player.track, banned_blocks))
     for apples in range(0, apple.apples):
         apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
+    for poison_apples in range(0, poison_apple.apples):
+        poison_apple.apple_pos.append(poison_apple.get_coordinates(player.track, banned_blocks, apple.apple_pos))
 
     while True:
         pygame.time.delay(75)
@@ -29,11 +28,20 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
         player.movement(direction)
         player.tracker(length)
         screen.fill(colors.get('black'))
+
         if [player.x_position, player.y_position] in apple.apple_pos:
             length += 4
             dualist.length += 4
+            if length + dualist.length + len(banned_blocks) >= 1600:
+                return length
             apple.apple_pos.pop(apple.apple_pos.index([player.x_position, player.y_position]))
             apple.apple_pos.append(apple.get_coordinates(player.track, banned_blocks))
+            if poison_apple.change_check(gamemode[0]):
+                poison_apple.apple_pos.pop(0)
+                poison_apple.apple_pos.append(
+                    poison_apple.get_coordinates(player.track, banned_blocks, apple.apple_pos))
+
+        draw_banned_blocks(banned_blocks, screen, player.edge)
 
         for cubes in player.track:
             pygame.draw.rect(screen, colors.get('dark_green'), [cubes[0], cubes[1], player.edge, player.edge])
@@ -50,11 +58,16 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
             pygame.draw.rect(screen, colors.get('dark_red'), [apples[0], apples[1], apple.edge, apple.edge])
             pygame.draw.rect(screen, colors.get('red'), [apples[0] + 1, apples[1] + 1, apple.edge - 2, apple.edge - 2])
 
-        if player.collision_check(banned_blocks, dualist.track):
+        for poison_apples in poison_apple.apple_pos:
+            pygame.draw.rect(screen, colors.get('dark_blue'),
+                             [poison_apples[0], poison_apples[1], poison_apple.edge, poison_apple.edge])
+            pygame.draw.rect(screen, colors.get('blue'),
+                             [poison_apples[0] + 1, poison_apples[1] + 1, poison_apple.edge - 2, poison_apple.edge - 2])
+        make_outline(size, screen)
+
+        if player.collision_check(banned_blocks, dualist.track,poison_apple.apple_pos):
             return length
 
-        make_outline(size, screen)
-        draw_banned_blocks(banned_blocks, screen, player.edge)
         score = base_font.render(f'Length: {length}', True, colors.get('white'))
         screen.blit(score, (50, 10))
 

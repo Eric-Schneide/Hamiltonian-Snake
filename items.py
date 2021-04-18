@@ -1,5 +1,4 @@
-import random
-import pygame
+import random, pygame
 
 
 class Snake:
@@ -57,13 +56,14 @@ class Snake:
         self.track.pop() if len(self.track) > length else None
         return self.track
 
-    def collision_check(self, banned_blocks, dualist_path):
+    def collision_check(self, banned_blocks, dualist_path, poisoned_apple):
         '''
         Checks if the head of the snake hits a block of the tail, a banned block from editing, or the barrier
         '''
         return self.x_position < 50 or self.x_position > (self.width - 50 - self.edge) or \
                self.y_position < 50 or self.y_position > (self.height - 50 - self.edge) or \
-               self.track[0] in self.track[1:] or self.track[0] in banned_blocks or self.track[0] in dualist_path
+               self.track[0] in self.track[1:] or self.track[0] in banned_blocks or \
+               self.track[0] in dualist_path or self.track[0] in poisoned_apple
 
 
 class Dualist(Snake):
@@ -125,16 +125,23 @@ class Food:
 
 class P_Food(Food):
     '''
-    the poisoned food which will move around the board. this encompasses the poisoned apple game mode.
+    The poisoned food which will randomly move around the board as the player collects normal apples.
+    This encompasses the poisoned apple game mode.
     '''
 
-    def __init__(self, size, apples):
-        self.width, self.height = size
-        self.edge = (self.width - 100) // 50
-        self.apples = apples
-        self.apple_info = []
+    def get_coordinates(self, track, banned_blocks, apple_pos, occupied=True):
+        '''
+        Finds non-banned coordinates for the apple which are not already occupied by the snake after being eaten
+        '''
+        while occupied:
+            food_x = self.edge * random.randint(0, ((self.width - 100) // self.edge) - 1) + 50
+            food_y = self.edge * random.randint(0, ((self.height - 100) // self.edge) - 1) + 50
+            occupied = [food_x, food_y] in track or [food_x, food_y] in banned_blocks or \
+                       [food_x, food_y] in apple_pos or [food_x, food_y] in self.apple_pos
+        return [food_x, food_y]
 
-    def movement(self):
+    def change_check(self, chance):
         '''
-        the set movement of the poisoned apple
+        Acts as a form or randomness for the movement of the poisoned apples
         '''
+        return random.randint(0, chance)
