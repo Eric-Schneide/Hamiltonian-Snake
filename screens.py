@@ -89,7 +89,7 @@ def loss_screen(length, screen, size, base_font, player, banned_blocks):
     while True:
         x, y = pygame.mouse.get_pos()
         loss = base_font.render('Game Over', True, colors.get('white'))
-        score = base_font.render(f'Final Score: {length + len(banned_blocks)} ', True, colors.get('white'))
+        score = base_font.render(f'Final Score: {length} ', True, colors.get('white'))
         replay = pygame.font.SysFont('arial', 32, False, True if 240 <= x <= 390 and 320 <= y <= 350 else False) \
             .render('Play Again', True, colors.get('white'))
         editor = pygame.font.SysFont('arial', 32, False, True if 490 <= x <= 640 and 320 <= y <= 350 else False) \
