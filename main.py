@@ -1,5 +1,5 @@
 from game import maingame, pygame
-from screens import start_menu, settings, loss_screen
+from screens import settings, loss_screen
 from items import Snake
 
 

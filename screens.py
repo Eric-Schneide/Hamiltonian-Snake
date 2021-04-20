@@ -26,7 +26,6 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
             .render("Dualist", True, colors.get('white'))
 
         screen.fill(colors.get('black'))
-        draw_arrow(screen)
         make_outline(size, screen)
         screen.blit(title, (250, 70))
         screen.blit(game_mode_list, (75, 150))
