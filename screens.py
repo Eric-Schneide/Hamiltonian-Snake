@@ -3,13 +3,6 @@ from game import edit, make_outline, draw_banned_blocks, draw_arrow, sys
 from items import pygame
 
 
-def start_menu():
-    '''
-    The main menu which is used as an opening page for the game.
-    '''
-    pass
-
-
 def settings(size, screen, base_font, player, gamemode, banned_blocks):
     '''
     The page where the player will be able to customize their game with certain game modes which can be turned or off
