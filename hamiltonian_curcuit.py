@@ -40,11 +40,11 @@ def hamiltonian_circuit(size, screen, apples, player):
             track.pop()
         index += 1
         if [path[index % len(path)][0], path[index % len(path)][1]] in apple.apple_pos:
-            if length+4>=1600:
-                length=1
-                track=[]
+            if length + 4 >= 1600:
+                length = 1
+                track = []
             else:
-                length+=4
+                length += 4
             apple.apple_pos.pop(apple.apple_pos.index([path[index % len(path)][0], path[index % len(path)][1]]))
             apple.apple_pos.append(apple.get_coordinates(track, []))
 
