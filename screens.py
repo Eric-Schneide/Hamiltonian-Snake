@@ -1,5 +1,5 @@
 from colors import colors
-from game import edit, make_outline, draw_banned_blocks, draw_arrow, sys
+from game import edit, make_outline, draw_banned_blocks, sys
 from items import pygame
 
 
@@ -43,13 +43,15 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 if pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 135 and 200 <= y <= 230:
                     banned_blocks = edit(size, player.edge, screen, banned_blocks)
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 255 and 250 <= y <= 280:
-                    gamemode[0] = (gamemode[0] + 1) % 4
+                    gamemode[0] = (gamemode[0] + 1) % 6
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 210 and 300 <= y <= 330:
                     gamemode[1] = (gamemode[1] + 1) % 5
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 175 and 350 <= y <= 380:
                     gamemode[2] = 1 if gamemode[2] == 0 else 0
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
-                    return True, banned_blocks, gamemode
+                    return banned_blocks, gamemode, True
+                elif pygame.mouse.get_pressed(num_buttons=3)[0] and 475 <= x <= 835 and 520 <= y <= 550:
+                    return banned_blocks, gamemode, False
 
         x_poison = 265
         for poison_apples in range(0, gamemode[0]):

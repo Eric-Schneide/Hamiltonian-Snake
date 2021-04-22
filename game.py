@@ -30,8 +30,8 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
         screen.fill(colors.get('black'))
 
         if [player.x_position, player.y_position] in apple.apple_pos:
-            length += 4
-            dualist.length += 4
+            length += 2
+            dualist.length += 2
             if length + dualist.length + len(banned_blocks) >= 1600:
                 return length
             apple.apple_pos.pop(apple.apple_pos.index([player.x_position, player.y_position]))
@@ -65,7 +65,7 @@ def maingame(size, screen, base_font, player, banned_blocks, gamemode, length=1,
                              [poison_apples[0] + 1, poison_apples[1] + 1, poison_apple.edge - 2, poison_apple.edge - 2])
         make_outline(size, screen)
 
-        if player.collision_check(banned_blocks, dualist.track,poison_apple.apple_pos):
+        if player.collision_check(banned_blocks, dualist.track, poison_apple.apple_pos):
             return length
 
         score = base_font.render(f'Length: {length}', True, colors.get('white'))
@@ -102,3 +102,7 @@ def edit(size, edge, screen, banned_blocks):
                         pygame.draw.line(screen, colors.get('black'), (cell_x, cell_y), (cell_x + edge, cell_y + edge))
                         banned_blocks.remove([cell_x, cell_y])
         pygame.display.update()
+
+
+
+
