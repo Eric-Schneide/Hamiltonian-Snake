@@ -22,7 +22,7 @@ def mainframe(banned_blocks=[], gamemode=[0, 0, 0], settings_skip=False):
             length = maingame(size, screen, base_font, player, banned_blocks, gamemode)
             settings_skip = loss_screen(length, screen, size, base_font, player, banned_blocks)
         else:
-            hamiltonian_circuit(size, screen, player)
+            hamiltonian_circuit(size, screen, 2*gamemode[1]+1, player)
 
 
 
