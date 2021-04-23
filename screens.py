@@ -45,7 +45,7 @@ def settings(size, screen, base_font, player, gamemode, banned_blocks):
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 255 and 250 <= y <= 280:
                     gamemode[0] = (gamemode[0] + 1) % 6
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 210 and 300 <= y <= 330:
-                    gamemode[1] = (gamemode[1] + 1) % 5
+                    gamemode[1] = (gamemode[1] + 1) % 8
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 65 <= x <= 175 and 350 <= y <= 380:
                     gamemode[2] = 1 if gamemode[2] == 0 else 0
                 elif pygame.mouse.get_pressed(num_buttons=3)[0] and 580 <= x <= 835 and 470 <= y <= 500:
